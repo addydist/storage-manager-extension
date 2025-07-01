@@ -431,6 +431,7 @@ function App() {
                         <table className="w-full">
                             <thead className="bg-gray-50 dark:bg-gray-900 sticky top-0">
                                 <tr>
+                                    <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-6">#</th>
                                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                         Key
                                     </th>
@@ -443,12 +444,13 @@ function App() {
                                 </tr>
                             </thead>
                             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                {paginatedData.map(([key, value]) => (
-                                    <tr key={key} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100 font-mono break-all max-w-xs">
+                                {paginatedData.map(([key, value], idx) => (
+                                    <tr key={key} className="hover:bg-gray-50 dark:hover:bg-gray-700 align-top">
+                                        <td className="px-2 py-3 text-xs text-gray-500 dark:text-gray-400 font-mono text-center">{(currentPage - 1) * ITEMS_PER_PAGE + idx + 1}</td>
+                                        <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100 font-mono break-all max-w-xs align-top">
                                             {key}
                                         </td>
-                                        <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-200">
+                                        <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-200 align-top">
                                             {editingKey === key ? (
                                                 <div className="flex items-center space-x-2">
                                                     <textarea
@@ -477,22 +479,35 @@ function App() {
                                             ) : (
                                                 <div className="font-mono break-all max-w-md">
                                                     {typeof value === 'string' && value.length > 100 ? (
-                                                        <>
-                                                            {expandedRows[key] ? value : value.substring(0, 100) + '...'}
-                                                            <button
-                                                                onClick={() => toggleExpand(key)}
-                                                                className="ml-2 text-blue-600 dark:text-blue-400 hover:underline text-xs"
-                                                            >
-                                                                {expandedRows[key] ? 'Show less' : 'Show more'}
-                                                            </button>
-                                                        </>
+                                                        expandedRows[key] ? (
+                                                            <div className="flex flex-col items-start">
+                                                                <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">{key}</div>
+                                                                <div className="whitespace-pre-wrap break-all text-xs mb-1 max-h-48 overflow-auto">{value}</div>
+                                                                <button
+                                                                    onClick={() => toggleExpand(key)}
+                                                                    className="text-blue-600 dark:text-blue-400 hover:underline text-xs mt-1"
+                                                                >
+                                                                    Show less
+                                                                </button>
+                                                            </div>
+                                                        ) : (
+                                                            <>
+                                                                {value.substring(0, 100) + '...'}
+                                                                <button
+                                                                    onClick={() => toggleExpand(key)}
+                                                                    className="ml-2 text-blue-600 dark:text-blue-400 hover:underline text-xs"
+                                                                >
+                                                                    Show more
+                                                                </button>
+                                                            </>
+                                                        )
                                                     ) : (
                                                         value
                                                     )}
                                                 </div>
                                             )}
                                         </td>
-                                        <td className="px-4 py-3 text-sm">
+                                        <td className="px-4 py-3 text-sm align-top">
                                             <div className="flex space-x-1">
                                                 {editingKey !== key && (
                                                     <>
